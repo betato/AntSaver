@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ants\Ant.cpp" />
+    <ClCompile Include="ants\AntMap.cpp" />
+    <ClCompile Include="ants\Toolbar.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="FileLoader.cpp" />
@@ -27,12 +30,15 @@
     <ClCompile Include="resmgr\ResourceManager.cpp" />
     <ClCompile Include="resmgr\SoundManager.cpp" />
     <ClCompile Include="resmgr\TextureManager.cpp" />
-    <ClCompile Include="states\Ant.cpp" />
     <ClCompile Include="states\GameState.cpp" />
     <ClCompile Include="states\RunningState.cpp" />
-    <ClCompile Include="states\Toolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Desktop\antMap.h" />
+    <ClInclude Include="ants\Ant.h" />
+    <ClInclude Include="ants\antMap.h" />
+    <ClInclude Include="ants\Direction.h" />
+    <ClInclude Include="ants\Toolbar.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="FileLoader.h" />
@@ -41,11 +47,8 @@
     <ClInclude Include="resmgr\ResourceManager.h" />
     <ClInclude Include="resmgr\SoundManager.h" />
     <ClInclude Include="resmgr\TextureManager.h" />
-    <ClInclude Include="states\Ant.h" />
-    <ClInclude Include="states\Direction.h" />
     <ClInclude Include="states\GameState.h" />
     <ClInclude Include="states\RunningState.h" />
-    <ClInclude Include="states\Toolbar.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{85210620-3EFC-41D7-B3A5-3EB2537439FC}</ProjectGuid>

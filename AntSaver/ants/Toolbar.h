@@ -7,7 +7,7 @@ class ToolBar : public sf::Drawable
 public:
 	ToolBar();
 	ToolBar(sf::RectangleShape box);
-
+	
 private:
 	sf::RectangleShape background;
 

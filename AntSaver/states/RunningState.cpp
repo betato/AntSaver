@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "..\Display.h"
-#include "Direction.h"
+#include "..\ants\Direction.h"
 
 namespace State
 {
@@ -38,15 +38,15 @@ namespace State
 			heatmap[i] = 0;
 		}
 
-		colourMap[0] = sf::Color::Black;
-		colourMap[1] = sf::Color::Red;
-		colourMap[2] = sf::Color::Green;
-		colourMap[3] = sf::Color::Magenta;
-		dirMap[0] = true; // Turn right on black
-		dirMap[1] = false; // Turn left on red
-		dirMap[2] = true; // Turn right on green
-		dirMap[3] = false;
-		numColours = 4;
+		antMap.colours[0] = sf::Color::Black;
+		antMap.colours[1] = sf::Color::Red;
+		antMap.colours[2] = sf::Color::Green;
+		antMap.colours[3] = sf::Color::Magenta;
+		antMap.directions[0] = true; // Turn right on black
+		antMap.directions[1] = false; // Turn left on red
+		antMap.directions[2] = true; // Turn right on green
+		antMap.directions[3] = false;
+		antMap.length = 4;
 
 		ant = Ant(windowSize.x / 2, windowSize.y / 2, Direction::N, sf::Color::Yellow);
 	}
@@ -55,9 +55,6 @@ namespace State
 	{
 		delete(antPath);
 		delete(heatmap);
-
-		delete(dirMap);
-		delete(colourMap);
 	}
 
 	void Running::input(const sf::Event& events)
@@ -133,8 +130,8 @@ namespace State
 		}
 
 		int gridLoc = windowSize.x * ant.y + ant.x; // Get ant location in grid
-		ant.turn(dirMap[antPath[gridLoc]]); // Turn
-		antPath[gridLoc] < numColours ? antPath[gridLoc]++ : antPath[gridLoc] = 0; // Change colour
+		ant.turn(antMap.directions[antPath[gridLoc]]); // Turn
+		antPath[gridLoc] < antMap.length ? antPath[gridLoc]++ : antPath[gridLoc] = 0; // Change colour
 		heatmap[gridLoc]++; // Update heatmap
 		ant.move(); // Move ant
 	}
@@ -174,7 +171,7 @@ namespace State
 		{
 			sf::Color c;
 			for (register unsigned int i = 0; i < size; i += 4) {
-				c = colourMap[antPath[i / 4]];
+				c = antMap.colours[antPath[i / 4]];
 
 				pixels[i] = c.r; // R
 				pixels[i + 1] = c.g; // G

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "GameState.h"
-#include "Ant.h"
-#include "Toolbar.h"
+#include "..\ants\Ant.h"
+#include "..\ants\Toolbar.h"
+#include "..\ants\antMap.h"
 
 namespace State
 {
@@ -21,16 +22,14 @@ namespace State
 		unsigned int* heatmap;
 		bool showHeatmap = false;
 
+		AntMap antMap;
+
 		ToolBar toolbar;
 		sf::View antView;
 		sf::View toolbarView;
 
 		//bool lMouseDown = false;
 		//sf::Vector2f mousePos;
-
-		sf::Color* colourMap = new sf::Color[256]; // Colour for each path value
-		bool* dirMap = new bool[256]; // Turn direction for each colour
-		int numColours; // Number of cell colours is colour and dir maps
 
 		Ant ant = Ant(1, 1, Direction::N, sf::Color::Yellow);
 	};

@@ -16,6 +16,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Ants">
+      <UniqueIdentifier>{c6fe4d8d-e36d-4228-b5e1-41fc0d92106c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -48,11 +51,14 @@
     <ClCompile Include="resmgr\TextureManager.cpp">
       <Filter>ResMgr</Filter>
     </ClCompile>
-    <ClCompile Include="states\Ant.cpp">
-      <Filter>State</Filter>
+    <ClCompile Include="ants\Ant.cpp">
+      <Filter>ResMgr</Filter>
     </ClCompile>
-    <ClCompile Include="states\Toolbar.cpp">
-      <Filter>State</Filter>
+    <ClCompile Include="ants\Toolbar.cpp">
+      <Filter>ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ants\AntMap.cpp">
+      <Filter>ResMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,13 +92,19 @@
     <ClInclude Include="resmgr\TextureManager.h">
       <Filter>ResMgr</Filter>
     </ClInclude>
-    <ClInclude Include="states\Ant.h">
+    <ClInclude Include="ants\Ant.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="states\Direction.h">
+    <ClInclude Include="ants\Direction.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="states\Toolbar.h">
+    <ClInclude Include="ants\Toolbar.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\antMap.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="ants\antMap.h">
       <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>
