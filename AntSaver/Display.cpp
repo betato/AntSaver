@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "wtypes.h"
+
 namespace Display
 {
 	std::unique_ptr<sf::RenderWindow> window;
@@ -9,6 +11,19 @@ namespace Display
 	void init(int framerate, int width, int height, std::string title)
 	{
 		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title);
+		window->setKeyRepeatEnabled(false);
+		window->setFramerateLimit(framerate);
+	}
+
+	void init(int framerate, std::string title)
+	{
+		RECT desktop; // Get desktop window handle
+		const HWND hDesktop = GetDesktopWindow(); // Get screen size
+		GetWindowRect(hDesktop, &desktop);
+		int width = desktop.right;
+		int height = desktop.bottom;
+
+		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title, sf::Style::Fullscreen);
 		window->setKeyRepeatEnabled(false);
 		window->setFramerateLimit(framerate);
 	}
@@ -26,6 +41,11 @@ namespace Display
 	void display()
 	{
 		window->display();
+	}
+
+	void close()
+	{
+		window->close();
 	}
 	
 	void checkEvents(State::GameState& gameState)

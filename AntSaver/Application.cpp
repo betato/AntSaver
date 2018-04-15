@@ -8,7 +8,8 @@
 
 Application::Application(int frameCap, int updateCap)
 {
-	Display::init(frameCap, 1280, 720, "Window");
+	//Display::init(frameCap, 1280, 720, "Window");
+	Display::init(frameCap, "Window");
 	updateRate = updateCap;
 
 	pushState(std::make_unique<State::Running>(*this));

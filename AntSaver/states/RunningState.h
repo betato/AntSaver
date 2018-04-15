@@ -13,7 +13,6 @@ namespace State
 		void update() override;
 		void draw() override;
 	private:
-		//sf::View view = sf::View(sf::Vector2f(640, 360), sf::Vector2f(1280, 720));
 		char grid[][1000];
 	};
 }

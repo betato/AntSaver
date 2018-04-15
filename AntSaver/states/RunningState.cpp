@@ -9,10 +9,6 @@ namespace State
 {
 	Running::Running(Application & application) : GameState(application)
 	{
-		//view.setViewport(sf::FloatRect(0, 0, 1, 1));
-		//view.zoom(0.0625);
-		//Display::setView(view);
-
 		for (int i = 0; i < 1000; i++)
 		{
 			grid[1000][i];
@@ -24,7 +20,7 @@ namespace State
 		// Close on esc press
 		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::Escape)
 		{
-			
+			Display::close();
 		}
 	}
 
@@ -35,8 +31,23 @@ namespace State
 
 	void Running::draw()
 	{
-		sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(100, 100));
-		rect.setPosition(100, 100);
-		Display::draw(rect);
+		const unsigned int W = 100;
+		const unsigned int H = 100;
+
+		sf::Uint8* pixels = new sf::Uint8[W*H*4];
+
+		sf::Texture texture;
+		texture.create(W, H);
+		sf::Sprite sprite(texture);
+
+		for (register int i = 0; i < W*H * 4; i += 4) {
+			pixels[i] = 100; // obviously, assign the values you need here to form your color
+			pixels[i + 1] = 100;
+			pixels[i + 2] = 100;
+			pixels[i + 3] = 255;
+		}
+
+		texture.update(pixels);
+		Display::draw(sprite);
 	}
 }

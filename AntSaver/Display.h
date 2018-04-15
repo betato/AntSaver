@@ -6,11 +6,13 @@
 
 namespace Display
 {
-	void init(int framerate, int width, int height, std::string title);
-	
+	void init(int framerate, int width, int height, std::string title); // Windowed
+	void init(int framerate, std::string title); // Fullscreen
+
 	void clear();
 	void draw(const sf::Drawable& drawable);
 	void display();
+	void close();
 
 	void checkEvents(State::GameState& gameState);
 	bool isOpen();
