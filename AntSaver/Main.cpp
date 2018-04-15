@@ -2,7 +2,7 @@
 
 int main()
 {
-	Application app = Application(60, 600);
+	Application app = Application(60, 60);
 	app.runLoop();
 
 	return 0;

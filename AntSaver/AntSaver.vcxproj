@@ -27,6 +27,7 @@
     <ClCompile Include="resmgr\ResourceManager.cpp" />
     <ClCompile Include="resmgr\SoundManager.cpp" />
     <ClCompile Include="resmgr\TextureManager.cpp" />
+    <ClCompile Include="states\Ant.cpp" />
     <ClCompile Include="states\GameState.cpp" />
     <ClCompile Include="states\RunningState.cpp" />
   </ItemGroup>
@@ -39,6 +40,8 @@
     <ClInclude Include="resmgr\ResourceManager.h" />
     <ClInclude Include="resmgr\SoundManager.h" />
     <ClInclude Include="resmgr\TextureManager.h" />
+    <ClInclude Include="states\Ant.h" />
+    <ClInclude Include="states\Direction.h" />
     <ClInclude Include="states\GameState.h" />
     <ClInclude Include="states\RunningState.h" />
   </ItemGroup>

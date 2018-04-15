@@ -48,6 +48,9 @@
     <ClCompile Include="resmgr\TextureManager.cpp">
       <Filter>ResMgr</Filter>
     </ClCompile>
+    <ClCompile Include="states\Ant.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="states\GameState.h">
@@ -79,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="resmgr\TextureManager.h">
       <Filter>ResMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="states\Ant.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="states\Direction.h">
+      <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

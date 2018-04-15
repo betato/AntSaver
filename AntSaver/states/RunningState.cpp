@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "..\Display.h"
+#include "Direction.h"
 
 namespace State
 {
@@ -29,11 +30,13 @@ namespace State
 			heatmap[i] = 0;
 		}
 
+		ant = Ant(windowSize.x / 2, windowSize.y / 2, Direction::N, sf::Color::Yellow);
+	}
 
-		// Set ant to the center of the screen
-		antPos = sf::Vector2u(windowSize.x / 2, windowSize.y / 2);
-		// Set ant direction to up
-		antDir = 0;
+	Running::~Running()
+	{
+		delete(antPath);
+		delete(heatmap);
 	}
 
 	void Running::input(const sf::Event& events)
@@ -52,45 +55,30 @@ namespace State
 
 	void Running::update()
 	{
-		if (antPos.x <= 0 || antPos.x >= windowSize.x || 
-			antPos.y <= 0 || antPos.y >= windowSize.y)
+		if (ant.x <= 0 || ant.x >= windowSize.x ||
+			ant.y <= 0 || ant.y >= windowSize.y)
 		{
 			return;
 		}
 
-		int gridLoc = windowSize.x * antPos.y + antPos.x;
+		int gridLoc = windowSize.x * ant.y + ant.x;
 
 		// Turn
 		if (antPath[gridLoc] > 100)
 		{
 			// Red, turn left
-			antDir < 1 ? antDir = 3 : antDir--;
+			ant.turn(false);
 			antPath[gridLoc] = 0;
 		}
 		else
 		{
 			// Black, turn right
-			antDir > 2 ? antDir = 0 : antDir++;
+			ant.turn(true);
 			antPath[gridLoc] = 255;
 		}
 		heatmap[gridLoc]++;
 
-		// Move
-		switch (antDir)
-		{
-		case 0: // N
-			antPos.y--;
-			break;
-		case 1: // E
-			antPos.x++;
-			break; 
-		case 2: // S
-			antPos.y++;
-			break; 
-		case 3: // W
-			antPos.x--;
-			break;
-		}
+		ant.move();
 	}
 
 	void Running::draw()
@@ -135,9 +123,6 @@ namespace State
 		delete(pixels);
 
 		// Draw Ant
-		sf::RectangleShape antRect = sf::RectangleShape(sf::Vector2f(1,1));
-		antRect.setPosition(antPos.x, antPos.y);
-		antRect.setFillColor(sf::Color::Yellow);
-		Display::draw(antRect);
+		Display::draw(ant);
 	}
 }
