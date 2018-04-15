@@ -22,6 +22,14 @@ namespace State
 		for (register unsigned int i = 0; i < numPixels; i++) {
 			antPath[i] = 0;
 		}
+
+		heatmap = new sf::Uint32[numPixels];
+		// Initilize all squares to black
+		for (register unsigned int i = 0; i < numPixels; i++) {
+			heatmap[i] = 0;
+		}
+
+
 		// Set ant to the center of the screen
 		antPos = sf::Vector2u(windowSize.x / 2, windowSize.y / 2);
 		// Set ant direction to up
@@ -34,6 +42,11 @@ namespace State
 		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::Escape)
 		{
 			Display::close();
+		}
+		// Toggle heatmap when H pressed
+		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::H)
+		{
+			showHeatmap = !showHeatmap;
 		}
 	}
 
@@ -60,7 +73,8 @@ namespace State
 			antDir > 2 ? antDir = 0 : antDir++;
 			antPath[gridLoc] = 255;
 		}
-		
+		heatmap[gridLoc]++;
+
 		// Move
 		switch (antDir)
 		{
@@ -87,11 +101,34 @@ namespace State
 		sf::Texture texture;
 		texture.create(windowSize.x, windowSize.y);
 		sf::Sprite sprite(texture);
-		for (register unsigned int i = 0; i < size; i += 4) {
-			pixels[i] = antPath[i/4]; // R
-			pixels[i + 1] = 0; // G
-			pixels[i + 2] = 0; // B
-			pixels[i + 3] = 255; // A
+		
+
+		if (showHeatmap)
+		{
+			unsigned int normMax = 1;
+			for (register unsigned int i = 0; i < windowSize.x * windowSize.y; i++) {
+				if (normMax < heatmap[i])
+				{
+					normMax = heatmap[i];
+				}
+			}
+			normMax = 255 / normMax;
+
+			for (register unsigned int i = 0; i < size; i += 4) {
+				pixels[i] = (sf::Uint8)(heatmap[i / 4] * normMax); // R
+				pixels[i + 1] = 0 ; // G
+				pixels[i + 2] = 0; // B
+				pixels[i + 3] = 255; // A
+			}
+		}
+		else
+		{
+			for (register unsigned int i = 0; i < size; i += 4) {
+				pixels[i] = antPath[i / 4]; // R
+				pixels[i + 1] = 0; // G
+				pixels[i + 2] = 0; // B
+				pixels[i + 3] = 255; // A
+			}
 		}
 		texture.update(pixels);
 		Display::draw(sprite);
