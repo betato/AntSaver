@@ -72,6 +72,24 @@ namespace State
 		{
 			showHeatmap = !showHeatmap;
 		}
+		// Zoom
+		if (events.type == sf::Event::MouseWheelScrolled)
+		{
+			Display::setView(antView);
+			sf::Vector2f beforeCoords = Display::getMappedMouse();
+			float scroll = events.mouseWheelScroll.delta;
+			if (scroll > 0)
+			{
+				antView.zoom((float)(std::fmin(scroll, 10) / 20) + 1);
+			}
+			else
+			{
+				antView.zoom((float)(std::fmax(scroll, -10) / 20) + 1);
+			}
+			Display::setView(antView);
+			sf::Vector2f afterCoords = Display::getMappedMouse();
+			antView.move(beforeCoords - afterCoords);
+		}
 	}
 
 	void Running::update()
