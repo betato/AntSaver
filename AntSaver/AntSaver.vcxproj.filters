@@ -51,6 +51,9 @@
     <ClCompile Include="states\Ant.cpp">
       <Filter>State</Filter>
     </ClCompile>
+    <ClCompile Include="states\Toolbar.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="states\GameState.h">
@@ -87,6 +90,9 @@
       <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="states\Direction.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="states\Toolbar.h">
       <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>
