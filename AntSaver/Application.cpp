@@ -38,8 +38,8 @@ void Application::runLoop()
 			frameCount = 0;
 			updateCount = 0;
 
-			//std::cout << " FPS: " << fps;
-			//std::cout << " UPS: " << ups;
+			std::cout << " FPS: " << fps;
+			std::cout << " UPS: " << ups;
 
 			counterClock.restart();
 		}

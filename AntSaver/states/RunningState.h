@@ -16,5 +16,6 @@ namespace State
 		sf::Vector2u windowSize;
 		sf::Uint8* antPath;
 		sf::Vector2u antPos;
+		unsigned int antDir;
 	};
 }
