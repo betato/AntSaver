@@ -12,7 +12,7 @@ namespace State
 	{
 		windowSize = Display::getSize();
 		
-		antView = sf::View(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), sf::Vector2f(windowSize.x, windowSize.y));
+		antView = sf::View(sf::FloatRect(0, 0, windowSize.x, windowSize.y));
 		antView.setViewport(sf::FloatRect(0, 0, 1, 1));
 		antView.zoom(0.125);
 		Display::setView(antView);
@@ -77,19 +77,50 @@ namespace State
 		{
 			Display::setView(antView);
 			sf::Vector2f beforeCoords = Display::getMappedMouse();
-			float scroll = events.mouseWheelScroll.delta;
+			float scroll = -events.mouseWheelScroll.delta;
 			if (scroll > 0)
 			{
-				antView.zoom((float)(std::fmin(scroll, 10) / 20) + 1);
+				// Zoom out
+				antView.zoom((float)(std::fmin(scroll, 6) / 20) + 1);
 			}
 			else
 			{
-				antView.zoom((float)(std::fmax(scroll, -10) / 20) + 1);
+				// Zoom in
+				antView.zoom((float)(std::fmax(scroll, -6) / 20) + 1);
 			}
 			Display::setView(antView);
 			sf::Vector2f afterCoords = Display::getMappedMouse();
 			antView.move(beforeCoords - afterCoords);
 		}
+		// Reset zoom
+		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Middle)
+		{
+			antView.reset(sf::FloatRect(0, 0, windowSize.x, windowSize.y));
+			antView.zoom(0.125);
+			Display::setView(antView);
+		}
+
+		/*
+		// Track left mouse button for pan
+		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Left)
+		{
+			//Display::setView(antView);
+			lMouseDown = true;
+			//mousePos = Display::getMappedMouse();
+		}
+		if (events.type == sf::Event::MouseButtonReleased && events.mouseButton.button == sf::Mouse::Left)
+		{
+			lMouseDown = false;
+		}
+		// Pan
+		if (events.type == sf::Event::MouseMoved && lMouseDown)
+		{
+			Display::setView(antView);
+			sf::Vector2f newPos = Display::getMappedMouse();
+			antView.move(mousePos - newPos);
+			mousePos = newPos;
+		}
+		*/
 	}
 
 	void Running::update()

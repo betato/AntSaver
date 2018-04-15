@@ -25,6 +25,9 @@ namespace State
 		sf::View antView;
 		sf::View toolbarView;
 
+		//bool lMouseDown = false;
+		//sf::Vector2f mousePos;
+
 		sf::Color* colourMap = new sf::Color[256]; // Colour for each path value
 		bool* dirMap = new bool[256]; // Turn direction for each colour
 		int numColours; // Number of cell colours is colour and dir maps
