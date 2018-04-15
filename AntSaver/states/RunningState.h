@@ -13,6 +13,8 @@ namespace State
 		void update() override;
 		void draw() override;
 	private:
-		char grid[][1000];
+		sf::Vector2u windowSize;
+		sf::Uint8* antPath;
+		sf::Vector2u antPos;
 	};
 }

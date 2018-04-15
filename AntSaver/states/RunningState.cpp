@@ -9,10 +9,15 @@ namespace State
 {
 	Running::Running(Application & application) : GameState(application)
 	{
-		for (int i = 0; i < 1000; i++)
-		{
-			grid[1000][i];
+		windowSize = Display::getSize();
+		unsigned int numPixels = windowSize.x * windowSize.y;
+		antPath = new sf::Uint8[numPixels];
+		// Initilize all squares to black
+		for (register unsigned int i = 0; i < numPixels; i++) {
+			antPath[i] = 0;
 		}
+		// Set ant to the center of the screen
+		antPos = sf::Vector2u(windowSize.x / 2, windowSize.y / 2);
 	}
 
 	void Running::input(const sf::Event& events)
@@ -31,20 +36,19 @@ namespace State
 
 	void Running::draw()
 	{
-		const unsigned int W = 100;
-		const unsigned int H = 100;
+		const unsigned int size = windowSize.x * windowSize.y * 4;
 
-		sf::Uint8* pixels = new sf::Uint8[W*H*4];
+		sf::Uint8* pixels = new sf::Uint8[size];
 
 		sf::Texture texture;
-		texture.create(W, H);
+		texture.create(windowSize.x, windowSize.y);
 		sf::Sprite sprite(texture);
 
-		for (register int i = 0; i < W*H * 4; i += 4) {
-			pixels[i] = 100; // obviously, assign the values you need here to form your color
-			pixels[i + 1] = 100;
-			pixels[i + 2] = 100;
-			pixels[i + 3] = 255;
+		for (register unsigned int i = 0; i < size; i += 4) {
+			pixels[i] = antPath[i/4]; // R
+			pixels[i + 1] = 0; // G
+			pixels[i + 2] = 0; // B
+			pixels[i + 3] = 255; // A
 		}
 
 		texture.update(pixels);
