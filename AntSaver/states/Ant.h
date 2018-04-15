@@ -8,9 +8,9 @@ class Ant : public sf::Drawable
 public:
 	unsigned int x, y;
 	Direction dir;
-	sf::Color color;
+	sf::Color colour;
 	
-	Ant(int x, int y, Direction dir, sf::Color color);
+	Ant(int x, int y, Direction dir, sf::Color colour);
 	void turn(bool right);
 	void move();
 

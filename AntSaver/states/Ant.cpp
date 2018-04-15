@@ -1,11 +1,11 @@
 #include "Ant.h"
 
-Ant::Ant(int x, int y, Direction dir, sf::Color color)
+Ant::Ant(int x, int y, Direction dir, sf::Color colour)
 {
 	this->x = x;
 	this->y = y;
 	this->dir = dir;
-	this->color = color;
+	this->colour = colour;
 }
 
 void Ant::turn(bool right)
@@ -71,6 +71,6 @@ void Ant::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	sf::RectangleShape antRect = sf::RectangleShape(sf::Vector2f(1, 1));
 	antRect.setPosition(x, y);
-	antRect.setFillColor(color);
+	antRect.setFillColor(colour);
 	target.draw(antRect);
 }

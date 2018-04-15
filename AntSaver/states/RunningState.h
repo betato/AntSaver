@@ -16,8 +16,12 @@ namespace State
 		void draw() override;
 	private:
 		sf::Vector2u windowSize;
-		sf::Uint8* antPath;
-		sf::Uint32* heatmap;
+		unsigned char* antPath;
+		unsigned int* heatmap;
+
+		sf::Color* colourMap = new sf::Color[256]; // Colour for each path value
+		bool* dirMap = new bool[256]; // Turn direction for each colour
+		int numColours; // Number of cell colours is colour and dir maps
 
 		Ant ant = Ant(1, 1, Direction::N, sf::Color::Yellow);
 
