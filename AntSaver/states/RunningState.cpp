@@ -20,10 +20,6 @@ namespace State
 		toolbarView = sf::View(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), sf::Vector2f(windowSize.x, windowSize.y));
 		toolbarView.setViewport(sf::FloatRect(0, 0, 1, 1));
 
-		sf::RectangleShape box = sf::RectangleShape(sf::Vector2f(250, windowSize.y));
-		box.setPosition(windowSize.x - 250, 0);
-		box.setFillColor(sf::Color(100, 100, 100, 127));
-		toolbar = ToolBar(box);
 
 		unsigned int numPixels = windowSize.x * windowSize.y;
 		antPath = new unsigned char[numPixels];
@@ -44,9 +40,11 @@ namespace State
 		antMap.colours[3] = sf::Color::Magenta;
 		antMap.directions[0] = true; // Turn right on black
 		antMap.directions[1] = false; // Turn left on red
-		antMap.directions[2] = true; // Turn right on green
+		antMap.directions[2] = false; // Turn right on green
 		antMap.directions[3] = false;
 		antMap.length = 4;
+
+		toolbar = ToolBar(sf::Vector2f(windowSize.x - 250, 0), sf::Vector2f(250, windowSize.y), &antMap);
 
 		ant = Ant(windowSize.x / 2, windowSize.y / 2, Direction::N, sf::Color::Yellow);
 	}
@@ -96,6 +94,9 @@ namespace State
 			antView.zoom(0.125);
 			Display::setView(antView);
 		}
+
+		Display::setView(antView);
+		toolbar.input(events, Display::getMappedMouse());
 
 		/*
 		// Track left mouse button for pan

@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="ants\Ant.cpp" />
     <ClCompile Include="ants\AntMap.cpp" />
+    <ClCompile Include="ants\Button.cpp" />
+    <ClCompile Include="ants\DirectionBrowser.cpp" />
     <ClCompile Include="ants\Toolbar.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Display.cpp" />
@@ -34,10 +36,11 @@
     <ClCompile Include="states\RunningState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\antMap.h" />
     <ClInclude Include="ants\Ant.h" />
     <ClInclude Include="ants\antMap.h" />
+    <ClInclude Include="ants\Button.h" />
     <ClInclude Include="ants\Direction.h" />
+    <ClInclude Include="ants\DirectionBrowser.h" />
     <ClInclude Include="ants\Toolbar.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Display.h" />

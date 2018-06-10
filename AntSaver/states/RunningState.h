@@ -28,9 +28,6 @@ namespace State
 		sf::View antView;
 		sf::View toolbarView;
 
-		//bool lMouseDown = false;
-		//sf::Vector2f mousePos;
-
 		Ant ant = Ant(1, 1, Direction::N, sf::Color::Yellow);
 	};
 }

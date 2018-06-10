@@ -1,4 +1,5 @@
 #include "Toolbar.h"
+#include "..\resmgr\ResourceManager.h"
 
 ToolBar::ToolBar()
 {
@@ -7,12 +8,25 @@ ToolBar::ToolBar()
 	background.setFillColor(sf::Color(100, 100, 100, 127));
 }
 
-ToolBar::ToolBar(sf::RectangleShape box)
+ToolBar::ToolBar(sf::Vector2f position, sf::Vector2f size, AntMap * antMap)
 {
-	background = box;
+	this->position = position;
+	background = sf::RectangleShape(size);
+	background.setFillColor(sf::Color(100, 100, 100, 127));
+	this->antMap = antMap;
+
+	directionBrowser = DirectionBrowser(antMap, sf::Vector2f(0, 0));
+}
+
+void ToolBar::input(const sf::Event & events, sf::Vector2f mousePos)
+{
+	directionBrowser.input(events, mousePos);
 }
 
 void ToolBar::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-	target.draw(background);
+	states.transform.translate(position);
+	target.draw(background, states);
+
+	target.draw(directionBrowser, states);
 }

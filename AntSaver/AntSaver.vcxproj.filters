@@ -60,6 +60,12 @@
     <ClCompile Include="ants\AntMap.cpp">
       <Filter>ResMgr</Filter>
     </ClCompile>
+    <ClCompile Include="ants\DirectionBrowser.cpp">
+      <Filter>ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ants\Button.cpp">
+      <Filter>ResMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="states\GameState.h">
@@ -101,10 +107,13 @@
     <ClInclude Include="ants\Toolbar.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\antMap.h">
+    <ClInclude Include="ants\antMap.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="ants\antMap.h">
+    <ClInclude Include="ants\DirectionBrowser.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="ants\Button.h">
       <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,7 +6,9 @@
 
 enum class TextureName
 {
-	Test
+	Test,
+	RightArrow,
+	LeftArrow
 };
 
 class TextureManager : public BaseManager<TextureName, sf::Texture>

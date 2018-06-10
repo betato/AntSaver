@@ -72,5 +72,5 @@ void Ant::draw(sf::RenderTarget & target, sf::RenderStates states) const
 	sf::RectangleShape antRect = sf::RectangleShape(sf::Vector2f(1, 1));
 	antRect.setPosition(x, y);
 	antRect.setFillColor(colour);
-	target.draw(antRect);
+	target.draw(antRect, states);
 }
