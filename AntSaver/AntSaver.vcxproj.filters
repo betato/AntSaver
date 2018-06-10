@@ -16,9 +16,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Ants">
-      <UniqueIdentifier>{c6fe4d8d-e36d-4228-b5e1-41fc0d92106c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -101,13 +98,13 @@
     <ClInclude Include="ants\Toolbar.h">
       <Filter>State</Filter>
     </ClInclude>
-    <ClInclude Include="ants\antMap.h">
-      <Filter>State</Filter>
-    </ClInclude>
     <ClInclude Include="ants\DirectionBrowser.h">
       <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="ants\Button.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="ants\antMap.h">
       <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>

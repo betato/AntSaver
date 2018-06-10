@@ -1,4 +1,4 @@
-#include "antMap.h"
+#include "AntMap.h"
 
 AntMap::~AntMap()
 {

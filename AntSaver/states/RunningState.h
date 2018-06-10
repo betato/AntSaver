@@ -3,7 +3,7 @@
 #include "GameState.h"
 #include "..\ants\Ant.h"
 #include "..\ants\Toolbar.h"
-#include "..\ants\antMap.h"
+#include "..\ants\AntMap.h"
 
 namespace State
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
-#include "antMap.h"
+#include "AntMap.h"
 #include "DirectionBrowser.h"
 
 class ToolBar : public sf::Drawable

@@ -3,7 +3,7 @@
 #include <SFML\Graphics.hpp>
 
 #include "Button.h"
-#include "antMap.h"
+#include "AntMap.h"
 
 class DirectionBrowser : public sf::Drawable
 {
