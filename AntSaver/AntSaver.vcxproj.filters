@@ -24,9 +24,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="FileLoader.cpp">
-      <Filter>Base</Filter>
-    </ClCompile>
     <ClCompile Include="Display.cpp">
       <Filter>Base</Filter>
     </ClCompile>
@@ -73,9 +70,6 @@
     </ClInclude>
     <ClInclude Include="states\RunningState.h">
       <Filter>State</Filter>
-    </ClInclude>
-    <ClInclude Include="FileLoader.h">
-      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="Display.h">
       <Filter>Base</Filter>
