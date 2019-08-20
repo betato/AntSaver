@@ -90,9 +90,9 @@ sf::Vector2f Display::getMappedMouse()
 
 sf::FloatRect Display::getMappedBounds()
 {
-	return sf::FloatRect(
-		window->mapPixelToCoords(sf::Vector2i(0, 0)),
-		window->mapPixelToCoords(sf::Vector2i(window->getSize())));
+	sf::Vector2f pos = window->mapPixelToCoords(window->getPosition());
+	return sf::FloatRect(pos, window->mapPixelToCoords(
+		sf::Vector2i(window->getSize()) + window->getPosition()) - pos);
 }
 
 sf::Vector2u Display::getSize()

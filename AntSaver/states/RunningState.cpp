@@ -5,7 +5,9 @@
 
 #include "..\Application.h"
 #include "..\Display.h"
+#include "..\resmgr\ResourceManager.h"
 #include "..\ants\Direction.h"
+#include <sstream>
 
 namespace State
 {
@@ -24,16 +26,16 @@ namespace State
 
 
 		gridSize = sf::Vector2u(1920, 1080);
-		unsigned int numPixels = gridSize.x * gridSize.y;
-		antPath = new unsigned char[numPixels];
+		unsigned int gridPixels = gridSize.x * gridSize.y;
+		antPath = new unsigned char[gridPixels];
 		// Initilize all squares to black
-		for (unsigned int i = 0; i < numPixels; i++) {
+		for (unsigned int i = 0; i < gridPixels; i++) {
 			antPath[i] = 0;
 		}
 
-		heatmap = new unsigned int[numPixels];
+		heatmap = new unsigned int[gridPixels];
 		// Initilize all squares to black
-		for (unsigned int i = 0; i < numPixels; i++) {
+		for (unsigned int i = 0; i < gridPixels; i++) {
 			heatmap[i] = 0;
 		}
 
@@ -106,15 +108,16 @@ namespace State
 		// Reset zoom
 		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Middle)
 		{
-			antView.reset(sf::FloatRect(windowSize.x / 2, windowSize.y / 2, windowSize.x, windowSize.y));
+			antView.reset(sf::FloatRect(0, 0, windowSize.x, windowSize.y));
 			antView.zoom(1);
 			display.setView(antView);
 		}
-
+		// Test Click
 		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Left)
 		{
 			display.setView(antView);
-			std::cout << "X:" << display.getMappedMouse().x << " Y:" << display.getMappedMouse().y << std::endl;
+			std::cout << "Pixel X:" << sf::Mouse::getPosition().x << " Y:" << sf::Mouse::getPosition().y << std::endl;
+			std::cout << "World X:" << display.getMappedMouse().x << " Y:" << display.getMappedMouse().y << std::endl;
 		}
 
 		display.setView(antView);
@@ -181,18 +184,17 @@ namespace State
 		// Draw Path
 		sf::FloatRect bounds = display.getMappedBounds();
 		int x1 = std::max((int)bounds.left, 0);
-		int x2 = std::min((int)bounds.width + x1, (int)gridSize.x - 1);
-		int y1 = std::max((int)bounds.left, 0);
-		int y2 = std::min((int)bounds.height + y1, (int)gridSize.y - 1);
+		int x2 = std::min((int)bounds.width + x1 + 2, (int)gridSize.x - 1);
+		int y1 = std::max((int)bounds.top, 0);
+		int y2 = std::min((int)bounds.height + y1 + 2, (int)gridSize.y - 1);
 
 		int width = x2 - x1;
 		int height = y2 - y1;
 
-		const unsigned int size = windowSize.x * windowSize.y * 4;
-		sf::Uint8* pixels = new sf::Uint8[size];
+		sf::Uint8* pixels = new sf::Uint8[width * height * 4];
 		
 		sf::Texture texture;
-		texture.create(windowSize.x, windowSize.y);
+		texture.create(width, height);
 		sf::Sprite sprite(texture);
 
 		if (showHeatmap)
@@ -207,26 +209,34 @@ namespace State
 			std::cout << "Max Visits: " << normMax << std::endl;
 			float multiplier = 255.0f / (float)normMax;
 
-			for (unsigned int i = 0; i < size; i += 4) {
-				pixels[i] = (sf::Uint8)(heatmap[i / 4] * multiplier); // R
-				pixels[i + 1] = 0; // G
-				pixels[i + 2] = 0; // B
-				pixels[i + 3] = 255; // A
+			int i = 0;
+			for (int y = y1; y < y2; y++) {
+				for (int x = x1; x < x2; x++) {
+					pixels[i] = (sf::Uint8)(heatmap[y * gridSize.x + x] * multiplier); // R
+					pixels[i + 1] = 0; // G
+					pixels[i + 2] = 0; // B
+					pixels[i + 3] = 255; // A
+					i += 4;
+				}
 			}
 		}
 		else
 		{
 			sf::Color c;
-			for (unsigned int i = 0; i < size; i += 4) {
-				c = antMap.colours[antPath[i / 4]];
-
-				pixels[i] = c.r; // R
-				pixels[i + 1] = c.g; // G
-				pixels[i + 2] = c.b; // B
-				pixels[i + 3] = c.a; // A
+			int i = 0;
+			for (int y = y1; y < y2; y++) {
+				for (int x = x1; x < x2; x++) {
+					c = antMap.colours[antPath[y * gridSize.x + x]];
+					pixels[i] = c.r; // R
+					pixels[i + 1] = c.g; // G
+					pixels[i + 2] = c.b; // B
+					pixels[i + 3] = c.a; // A
+					i += 4;
+				}
 			}
 		}
 		texture.update(pixels);
+		sprite.setPosition(x1, y1);
 		display.draw(sprite);
 		delete(pixels);
 
@@ -236,5 +246,16 @@ namespace State
 		display.setView(toolbarView);
 		display.draw(toolbar);
 
+
+
+		sf::Text text;
+		text.setFont(ResourceManager::get().getFont(FontName::Test));
+		std::stringstream ss;
+
+		ss << "x1: " << x1 << " x2: " << x2 << "\ny1: " << y1 << " y2: " << y2 << "\n\n";
+
+		text.setString(ss.str());
+		text.setCharacterSize(24);
+		display.draw(text);
 	}
 }

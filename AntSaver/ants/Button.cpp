@@ -24,7 +24,7 @@ void Button::input(const sf::Event & events, sf::Vector2f mousePos)
 {
 	if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Middle)
 	{
-		std::cout << "buttoned" << std::endl;
+		//std::cout << "buttoned" << std::endl;
 		//std::cout << this->buttonTrigger << std::endl;
 		/*(buttonClicked)(id);*/
 	}
