@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 
+#include "..\Application.h"
 #include "..\Display.h"
 #include "..\ants\Direction.h"
 
@@ -10,43 +11,44 @@ namespace State
 {
 	Running::Running(Application & application) : GameState(application)
 	{
-		windowSize = Display::getSize();
+		display = this->application->mainDisplay;
+		windowSize = display.getSize();
 		
-		antView = sf::View(sf::FloatRect(0, 0, windowSize.x, windowSize.y));
+		antView = sf::View(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), sf::Vector2f(windowSize.x, windowSize.y));
 		antView.setViewport(sf::FloatRect(0, 0, 1, 1));
 		antView.zoom(0.125);
-		Display::setView(antView);
+		display.setView(antView);
 
 		toolbarView = sf::View(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), sf::Vector2f(windowSize.x, windowSize.y));
 		toolbarView.setViewport(sf::FloatRect(0, 0, 1, 1));
 
 
-		unsigned int numPixels = windowSize.x * windowSize.y;
+		gridSize = sf::Vector2u(1920, 1080);
+		unsigned int numPixels = gridSize.x * gridSize.y;
 		antPath = new unsigned char[numPixels];
 		// Initilize all squares to black
-		for (register unsigned int i = 0; i < numPixels; i++) {
+		for (unsigned int i = 0; i < numPixels; i++) {
 			antPath[i] = 0;
 		}
 
 		heatmap = new unsigned int[numPixels];
 		// Initilize all squares to black
-		for (register unsigned int i = 0; i < numPixels; i++) {
+		for (unsigned int i = 0; i < numPixels; i++) {
 			heatmap[i] = 0;
 		}
+
+		ant = Ant(gridSize.x / 2, gridSize.y / 2, Direction::N, sf::Color::Yellow);
 
 		antMap.colours[0] = sf::Color::Black;
 		antMap.colours[1] = sf::Color::Red;
 		antMap.colours[2] = sf::Color::Green;
-		antMap.colours[3] = sf::Color::Magenta;
 		antMap.directions[0] = true; // Turn right on black
 		antMap.directions[1] = false; // Turn left on red
-		antMap.directions[2] = false; // Turn right on green
-		antMap.directions[3] = false;
-		antMap.length = 4;
+		antMap.directions[2] = true; // Turn right on green
+		antMap.length = 3;
+
 
 		toolbar = ToolBar(sf::Vector2f(windowSize.x - 250, 0), sf::Vector2f(250, windowSize.y), &antMap);
-
-		ant = Ant(windowSize.x / 2, windowSize.y / 2, Direction::N, sf::Color::Yellow);
 	}
 
 	Running::~Running()
@@ -60,18 +62,32 @@ namespace State
 		// Close on esc press
 		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::Escape)
 		{
-			Display::close();
+			display.close();
 		}
 		// Toggle heatmap when H pressed
 		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::H)
 		{
 			showHeatmap = !showHeatmap;
 		}
+		// Toggle fullscreen when F pressed
+		if (events.type == sf::Event::KeyPressed && events.key.code == sf::Keyboard::F11)
+		{
+			if (fullscreen)
+			{
+				fullscreen = false;
+				display.createWindow(640, 480);
+			}
+			else
+			{
+				fullscreen = true;
+				display.createWindow();
+			}
+		}
 		// Zoom
 		if (events.type == sf::Event::MouseWheelScrolled)
 		{
-			Display::setView(antView);
-			sf::Vector2f beforeCoords = Display::getMappedMouse();
+			display.setView(antView);
+			sf::Vector2f beforeCoords = display.getMappedMouse();
 			float scroll = -events.mouseWheelScroll.delta;
 			if (scroll > 0)
 			{
@@ -83,20 +99,40 @@ namespace State
 				// Zoom in
 				antView.zoom((float)(std::fmax(scroll, -6) / 20) + 1);
 			}
-			Display::setView(antView);
-			sf::Vector2f afterCoords = Display::getMappedMouse();
+			display.setView(antView);
+			sf::Vector2f afterCoords = display.getMappedMouse();
 			antView.move(beforeCoords - afterCoords);
 		}
 		// Reset zoom
 		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Middle)
 		{
-			antView.reset(sf::FloatRect(0, 0, windowSize.x, windowSize.y));
-			antView.zoom(0.125);
-			Display::setView(antView);
+			antView.reset(sf::FloatRect(windowSize.x / 2, windowSize.y / 2, windowSize.x, windowSize.y));
+			antView.zoom(1);
+			display.setView(antView);
 		}
 
-		Display::setView(antView);
-		toolbar.input(events, Display::getMappedMouse());
+		if (events.type == sf::Event::MouseButtonPressed && events.mouseButton.button == sf::Mouse::Left)
+		{
+			display.setView(antView);
+			std::cout << "X:" << display.getMappedMouse().x << " Y:" << display.getMappedMouse().y << std::endl;
+		}
+
+		display.setView(antView);
+		toolbar.input(events, display.getMappedMouse());
+
+		if (display.getSize() != windowSize)
+		{
+			windowSize = display.getSize();
+
+			toolbarView = sf::View(sf::Vector2f(windowSize.x / 2, windowSize.y / 2), sf::Vector2f(windowSize.x, windowSize.y));
+			toolbarView.setViewport(sf::FloatRect(0, 0, 1, 1));
+			toolbar.updatePos(sf::Vector2f(windowSize.x - 250, 0), sf::Vector2f(250, windowSize.y));
+
+			antView = sf::View(sf::FloatRect(windowSize.x / 2, windowSize.y / 2, windowSize.x, windowSize.y));
+			antView.setViewport(sf::FloatRect(0, 0, 1, 1));
+			antView.zoom(0.125);
+			display.setView(antView);
+		}
 
 		/*
 		// Track left mouse button for pan
@@ -124,13 +160,13 @@ namespace State
 	void Running::update()
 	{
 		// Check to see if ant is in bounds
-		if (ant.x <= 0 || ant.x >= windowSize.x ||
-			ant.y <= 0 || ant.y >= windowSize.y)
+		if (ant.x <= 0 || ant.x >= gridSize.x ||
+			ant.y <= 0 || ant.y >= gridSize.y)
 		{
 			return;
 		}
 
-		int gridLoc = windowSize.x * ant.y + ant.x; // Get ant location in grid
+		int gridLoc = gridSize.x * ant.y + ant.x; // Get ant location in grid
 		ant.turn(antMap.directions[antPath[gridLoc]]); // Turn
 		antPath[gridLoc] < antMap.length ? antPath[gridLoc]++ : antPath[gridLoc] = 0; // Change colour
 		heatmap[gridLoc]++; // Update heatmap
@@ -140,11 +176,21 @@ namespace State
 	void Running::draw()
 	{
 
-		Display::setView(antView);
+		display.setView(antView);
 
 		// Draw Path
+		sf::FloatRect bounds = display.getMappedBounds();
+		int x1 = std::max((int)bounds.left, 0);
+		int x2 = std::min((int)bounds.width + x1, (int)gridSize.x - 1);
+		int y1 = std::max((int)bounds.left, 0);
+		int y2 = std::min((int)bounds.height + y1, (int)gridSize.y - 1);
+
+		int width = x2 - x1;
+		int height = y2 - y1;
+
 		const unsigned int size = windowSize.x * windowSize.y * 4;
 		sf::Uint8* pixels = new sf::Uint8[size];
+		
 		sf::Texture texture;
 		texture.create(windowSize.x, windowSize.y);
 		sf::Sprite sprite(texture);
@@ -152,7 +198,7 @@ namespace State
 		if (showHeatmap)
 		{
 			unsigned int normMax = 1;
-			for (register unsigned int i = 0; i < windowSize.x * windowSize.y; i++) {
+			for (unsigned int i = 0; i < gridSize.x * gridSize.y; i++) {
 				if (normMax < heatmap[i])
 				{
 					normMax = heatmap[i];
@@ -161,7 +207,7 @@ namespace State
 			std::cout << "Max Visits: " << normMax << std::endl;
 			float multiplier = 255.0f / (float)normMax;
 
-			for (register unsigned int i = 0; i < size; i += 4) {
+			for (unsigned int i = 0; i < size; i += 4) {
 				pixels[i] = (sf::Uint8)(heatmap[i / 4] * multiplier); // R
 				pixels[i + 1] = 0; // G
 				pixels[i + 2] = 0; // B
@@ -171,7 +217,7 @@ namespace State
 		else
 		{
 			sf::Color c;
-			for (register unsigned int i = 0; i < size; i += 4) {
+			for (unsigned int i = 0; i < size; i += 4) {
 				c = antMap.colours[antPath[i / 4]];
 
 				pixels[i] = c.r; // R
@@ -181,14 +227,14 @@ namespace State
 			}
 		}
 		texture.update(pixels);
-		Display::draw(sprite);
+		display.draw(sprite);
 		delete(pixels);
 
 		// Draw Ant
-		Display::draw(ant);
+		display.draw(ant);
 
-		Display::setView(toolbarView);
-		Display::draw(toolbar);
+		display.setView(toolbarView);
+		display.draw(toolbar);
 
 	}
 }

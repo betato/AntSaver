@@ -4,84 +4,98 @@
 
 #include "wtypes.h"
 
-namespace Display
+std::unique_ptr<sf::RenderWindow> window;
+
+Display::Display()
 {
-	std::unique_ptr<sf::RenderWindow> window;
+}
 
-	void init(int framerate, int width, int height, std::string title)
-	{
-		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title);
-		window->setKeyRepeatEnabled(false);
-		window->setFramerateLimit(framerate);
-	}
+Display::Display(int framerate, std::string title)
+{
+	this->framerate = framerate;
+	this->title = title;
+}
 
-	void init(int framerate, std::string title)
-	{
-		RECT desktop; // Get desktop window handle
-		const HWND hDesktop = GetDesktopWindow(); // Get screen size
-		GetWindowRect(hDesktop, &desktop);
-		int width = desktop.right;
-		int height = desktop.bottom;
+void Display::createWindow(int width, int height)
+{
+	window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title);
+	window->setKeyRepeatEnabled(false);
+	window->setFramerateLimit(framerate);
+}
 
-		window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title, sf::Style::Fullscreen);
-		window->setKeyRepeatEnabled(false);
-		window->setFramerateLimit(framerate);
-	}
+void Display::createWindow()
+{
+	RECT desktop; // Get desktop window handle
+	const HWND hDesktop = GetDesktopWindow(); // Get screen size
+	GetWindowRect(hDesktop, &desktop);
+	int width = desktop.right;
+	int height = desktop.bottom;
 
-	void clear()
-	{
-		window->clear();
-	}
+	window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), title, sf::Style::Fullscreen);
+	window->setKeyRepeatEnabled(false);
+	window->setFramerateLimit(framerate);
+}
 
-	void draw(const sf::Drawable & drawable)
-	{
-		window->draw(drawable);
-	}
+void Display::clear()
+{
+	window->clear();
+}
 
-	void display()
-	{
-		window->display();
-	}
+void Display::draw(const sf::Drawable & drawable)
+{
+	window->draw(drawable);
+}
 
-	void close()
-	{
-		window->close();
-	}
+void Display::display()
+{
+	window->display();
+}
+
+void Display::close()
+{
+	window->close();
+}
 	
-	void checkEvents(State::GameState& gameState)
+void Display::checkEvents(State::GameState& gameState)
+{
+	sf::Event event;
+	while (window->pollEvent(event))
 	{
-		sf::Event event;
-		while (window->pollEvent(event))
+		// Sent game events
+		gameState.input(event);
+		// Check for close
+		if (event.type == sf::Event::Closed)
 		{
-			// Sent game events
-			gameState.input(event);
-			// Check for close
-			if (event.type == sf::Event::Closed)
-			{
-				window->close();
-			}
+			window->close();
 		}
 	}
+}
 
-	bool isOpen()
-	{
-		return window->isOpen();
-	}
+bool Display::isOpen()
+{
+	return window->isOpen();
+}
 
-	void setView(const sf::View & view)
-	{
-		window->setView(view);
-	}
+void Display::setView(const sf::View & view)
+{
+	window->setView(view);
+}
 
-	sf::Vector2f getMappedMouse()
-	{
-		// Get relative position and map to world coords
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(*window);
-		return window->mapPixelToCoords(pixelPos);
-	}
+sf::Vector2f Display::getMappedMouse()
+{
+	// Get relative position and map to world coords
+	sf::Vector2i pixelPos = sf::Mouse::getPosition(*window);
+	return window->mapPixelToCoords(pixelPos);
+}
 
-	sf::Vector2u getSize()
-	{
-		return window->getSize();
-	}
+sf::FloatRect Display::getMappedBounds()
+{
+	return sf::FloatRect(
+		window->mapPixelToCoords(sf::Vector2i(0, 0)),
+		window->mapPixelToCoords(sf::Vector2i(window->getSize())));
+}
+
+sf::Vector2u Display::getSize()
+{
+	return window->getSize();
 }

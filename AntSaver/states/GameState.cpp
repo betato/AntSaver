@@ -2,6 +2,5 @@
 
 namespace State
 {
-	GameState::GameState(Application & application)
-		: application(&application) { }
+	GameState::GameState(Application & application) : application(&application) { }
 }

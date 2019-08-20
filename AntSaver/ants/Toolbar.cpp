@@ -18,6 +18,12 @@ ToolBar::ToolBar(sf::Vector2f position, sf::Vector2f size, AntMap * antMap)
 	directionBrowser = DirectionBrowser(antMap, sf::Vector2f(0, 0));
 }
 
+void ToolBar::updatePos(sf::Vector2f position, sf::Vector2f size)
+{
+	this->position = position;
+	background.setSize(size);
+}
+
 void ToolBar::input(const sf::Event & events, sf::Vector2f mousePos)
 {
 	directionBrowser.input(events, mousePos);

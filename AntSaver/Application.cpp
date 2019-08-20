@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-#include "Display.h"
 #include "resmgr\ResourceManager.h"
 #include "states\RunningState.h"
 
 Application::Application(int frameCap, int updateCap)
 {
 	//Display::init(frameCap, 1280, 720, "Window");
-	Display::init(frameCap, "Window");
+	mainDisplay = Display(frameCap, "Window");
+	mainDisplay.createWindow();
 	updateRate = updateCap;
 
 	pushState(std::make_unique<State::Running>(*this));
@@ -30,7 +30,7 @@ void Application::runLoop()
 	sf::Clock updateClock;
 	sf::Clock counterClock;
 
-	while (Display::isOpen())
+	while (mainDisplay.isOpen())
 	{
 		if (counterClock.getElapsedTime() >= sf::seconds(1)) {
 			fps = frameCount;
@@ -38,8 +38,8 @@ void Application::runLoop()
 			frameCount = 0;
 			updateCount = 0;
 
-			std::cout << " FPS: " << fps << std::endl;
-			std::cout << " UPS: " << ups << std::endl;
+			//std::cout << " FPS: " << fps << std::endl;
+			//std::cout << " UPS: " << ups << std::endl;
 
 			counterClock.restart();
 		}
@@ -50,7 +50,7 @@ void Application::runLoop()
 			render = true;
 
 			// Update
-			Display::checkEvents(*states.top());	// Window and game input
+			mainDisplay.checkEvents(*states.top());	// Window and game input
 			states.top()->update();					// Update
 		}
 
@@ -58,9 +58,9 @@ void Application::runLoop()
 			frameCount++;
 
 			// Render
-			Display::clear();		// Clear
-			states.top()->draw();	// Draw
-			Display::display();		// Display
+			mainDisplay.clear();		// Clear
+			states.top()->draw();		// Draw
+			mainDisplay.display();		// Display
 		}
 
 		delta += updateClock.restart();

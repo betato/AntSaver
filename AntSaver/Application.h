@@ -3,6 +3,7 @@
 #include <memory>
 #include <stack>
 
+#include "Display.h"
 #include "states\GameState.h"
 
 class Application
@@ -16,8 +17,9 @@ public:
 
 	void runLoop();
 
+	Display mainDisplay;
+
 private:
 	int updateRate;
-
 	std::stack<std::unique_ptr<State::GameState>> states;
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "..\Display.h"
 #include "GameState.h"
 #include "..\ants\Ant.h"
 #include "..\ants\Toolbar.h"
@@ -17,9 +18,13 @@ namespace State
 		void update() override;
 		void draw() override;
 	private:
+		Display display;
 		sf::Vector2u windowSize;
+
+		sf::Vector2u gridSize;
 		unsigned char* antPath;
 		unsigned int* heatmap;
+		bool fullscreen = true;
 		bool showHeatmap = false;
 
 		AntMap antMap;

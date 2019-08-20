@@ -4,10 +4,14 @@
 
 #include "states\GameState.h"
 
-namespace Display
+class Display
 {
-	void init(int framerate, int width, int height, std::string title); // Windowed
-	void init(int framerate, std::string title); // Fullscreen
+public:
+	Display();
+	Display(int framerate, std::string title);
+
+	void createWindow(int width, int height); // Windowed
+	void createWindow(); // Fullscreen
 
 	void clear();
 	void draw(const sf::Drawable& drawable);
@@ -19,5 +23,10 @@ namespace Display
 	
 	void setView(const sf::View& view);
 	sf::Vector2f getMappedMouse();
+	sf::FloatRect getMappedBounds();
 	sf::Vector2u getSize();
-}
+
+private:
+	int framerate;
+	std::string title;
+};
